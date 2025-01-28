@@ -1,4 +1,4 @@
-import User from './User.js';
-import Book from './Book.js';
+import User from './User.ts';
+import Book from './resource.js';
 
 export { User, Book };

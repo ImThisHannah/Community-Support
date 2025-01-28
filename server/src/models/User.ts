@@ -1,64 +1,76 @@
-import { Schema, model, type Document } from 'mongoose';
-import bcrypt from 'bcrypt';
-import { type IBook, bookSchema } from './Book.js';
+const { model } = require('mongoose'); 
+const { IUser, IUserDocument, IUserModel } = require('../interfaces/User.ts');
 
-interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  savedBooks: IBook[];
-  isCorrectPassword(password: string): Promise<boolean>;
-  bookCount: number;
-}
-
-const userSchema = new Schema<IUser>(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/.+@.+\..+/, 'Must use a valid email address'],
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    // set savedBooks to be an array of data that adheres to the bookSchema
-    savedBooks: [bookSchema],
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  // set this to use virtual below
-  {
-    toJSON: {
-      virtuals: true,
-    },
-  }
-);
-
-// hash user password
-userSchema.pre<IUser>('save', async function (next) {
-  if (this.isNew || this.isModified('password')) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
-  }
-
-  next();
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'volunteer', 'resourceProvider', 'admin'],
+    default: 'user',
+  },
 });
 
-// custom method to compare and validate password for logging in
-userSchema.methods.isCorrectPassword = async function (password: string): Promise<boolean> {
-  return await bcrypt.compare(password, this.password);
+userSchema.statics.register = async (userData: IUser): Promise<IUserDocument> => { 
+  try {
+    const { email, password } = userData;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new Error('User already exists'); 
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10); 
+
+    const newUser = new User({ 
+      email, 
+      password: hashedPassword, 
+    });
+
+    await newUser.save();
+
+    return newUser; 
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
-// when we query a user, we'll also get another field called `bookCount` with the number of saved books we have
-userSchema.virtual('bookCount').get(function (this: IUser) {
-  return this.savedBooks.length;
-});
+userSchema.statics.login = async (email: string, password: string): Promise<IUserDocument | null> => {
+  try {
+    const user = await User.findOne({ email });
 
-const User = model<IUser>('User', userSchema);
+    if (!user) {
+      return null; 
+    }
 
-export default User;
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return null; 
+    }
+
+    return user;
+
+  } catch (error) {
+    console.error(error);
+    throw error; 
+  }
+};
+
+const User: IUserModel = model<IUserDocument, IUserModel>('User', userSchema); 
+
+module.exports = User;
+
+
+
+
+
