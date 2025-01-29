@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
-import bcrypt from 'bcriptjs';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../Models/User';
+import { User } from '../models/User';
 
 const router = express.Router();
 
-router.post('/register', asyync (req: Request, res: Response) => {
+router.post('/register', async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ username, email, password: hashedPassword });
@@ -15,7 +15,7 @@ router.post('/register', asyync (req: Request, res: Response) => {
 
 router.post('/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ where: {username } });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
         return res.status(404).send('User not found');
     } else {
