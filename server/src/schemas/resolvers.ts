@@ -1,5 +1,5 @@
-import { BaseContext } from '../services/auth-service'; // Import the context type
-import { AuthenticationError } from '../services/auth-service'; // Custom error class
+import { BaseContext } from '../services/auth-service'; 
+import { AuthenticationError } from '../services/auth-service'; 
 
 const resolvers = {
   Query: {
@@ -14,7 +14,7 @@ const resolvers = {
       if (!context.user) {
         throw new AuthenticationError('You must be logged in to view requests');
       }
-      return [{ id: 1, request: 'Need help with groceries' }]; // Example static data
+      return [{ id: 1, request: 'Need help with groceries' }]; 
     },
   },
 

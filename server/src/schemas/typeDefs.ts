@@ -1,28 +1,27 @@
 import { gql } from 'apollo-server-express';
 
-const typeDefs = gql
-
+const typeDefs = gql`
   type User {
-    _id: String!
+    _id: ID! 
     username: String!
     email: String!
   }
 
   type Request {
-    id: Int!
+    id: ID!
     request: String!
-    user: User!
+    user: User! 
   }
 
   type Query {
-    getRequests: [Request]
-    getUserProfile: User
+    getRequests: [Request!]!
+    getUserProfile: User! 
   }
 
   type Mutation {
-    addRequest(request: String!): Request
-    updateUserProfile(username: String, email: String): User
+    addRequest(request: String!): Request!
+    updateUserProfile(username: String, email: String): User!
   }
-;
+`;
 
 export { typeDefs };
