@@ -10,7 +10,7 @@ import {
 } from '@apollo/server/express4';
 import { authenticateToken } from './services/auth-service.js';
 // Import the two parts of a GraphQL schema
-import { typeDefs, resolvers } from './schemas/index.js';
+import { typeDefs, resolvers } from './schemas';
 import db from './config/connection.js';
 
 
@@ -25,7 +25,7 @@ const app = express();
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
   await server.start();
-  await db;
+  db;
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
