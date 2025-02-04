@@ -3,10 +3,7 @@ import mongoose, { Document, Model, model, Schema } from 'mongoose';
 // Database connection
 const connectDB = async () => {
   try {
-    await mongoose.connect('your_mongodb_connection_string', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect('your_mongodb_connection_string');
     console.log('MongoDB connected...');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
