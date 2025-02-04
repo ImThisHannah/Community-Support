@@ -1,6 +1,18 @@
-const mongoose = require('mongoose');
+import mongoose, { Document, Schema } from 'mongoose';
 
-const requestSchema = new mongoose.Schema({
+interface IRequest extends Document {
+  user: mongoose.Schema.Types.ObjectId;
+  description: string;
+  type: 'food' | 'shelter' | 'medical' | 'other';
+  location: {
+    type: string;
+    coordinates: number[];
+  };
+  urgency: 'low' | 'medium' | 'high';
+  status: 'pending' | 'in_progress' | 'completed';
+}
+
+const requestSchema: Schema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -36,6 +48,6 @@ const requestSchema = new mongoose.Schema({
   },
 });
 
-const Request = mongoose.model('Request', requestSchema);
+const Request = mongoose.model<IRequest>('Request', requestSchema);
 
-module.exports = Request;
+export default Request;
