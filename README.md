@@ -34,15 +34,17 @@ The Local Volunteer and Resource Finder app will be built using the MERN stack (
 
 ## User Needs Posting:
 
+https://firebase.google.com/docs/reference/rest/database
+
 People in need can post requests for specific help (e.g., grocery delivery, transportation to a medical appointment).
 These requests will be visible to volunteers and resource providers in their vicinity. Users can filter requests based on type of need, location, and urgency.
 
 ## Location-based Matching:
 
+https://www.bigdatacloud.com/ip-geolocation
+
 The app will leverage geolocation to match users with nearby volunteers and resources based on proximity (distance radius filtering). This allows volunteers to see nearby requests and resources, and vice versa.
 
-## Ratings and Feedback:
-After receiving help, users can rate the volunteer or resource provider to promote trust and accountability. Feedback helps improve the quality of service and fosters a sense of community.
 
 ## Admin Dashboard:
 
