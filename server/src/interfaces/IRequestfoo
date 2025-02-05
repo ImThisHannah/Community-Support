@@ -1,4 +1,5 @@
 import { Document, Model, Schema } from 'mongoose'; 
+import { IUserDocument } from './IUser';
 
 interface IRequest {
   user: IUserDocument; 
@@ -54,4 +55,4 @@ const requestSchema = new Schema({
 
 const Request: IRequestModel = model('Request', requestSchema); 
 
-module.exports = Request;
+export default Request;

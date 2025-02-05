@@ -1,7 +1,8 @@
-const { model } = require('mongoose'); 
-const { IUser, IUserDocument, IUserModel } = require('../interfaces/User.ts');
+import { model, Schema } from 'mongoose'; 
+import { IUser, IUserDocument, IUserModel } from '../interfaces/IUser';
+import bcrypt from 'bcrypt';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -68,9 +69,4 @@ userSchema.statics.login = async (email: string, password: string): Promise<IUse
 
 const User: IUserModel = model<IUserDocument, IUserModel>('User', userSchema); 
 
-module.exports = User;
-
-
-
-
-
+export default User;

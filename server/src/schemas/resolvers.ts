@@ -1,5 +1,5 @@
-import User from '../models/User';
-import Request from '../models/Request';
+import User from '../models/User.js';
+import Request from '../models/Request.js';
 
 export const resolvers = {
   Query: {
@@ -10,7 +10,7 @@ export const resolvers = {
         throw new Error('Error fetching requests');
       }
     },
-    getUserProfile: async (parent, { id }) => {
+    getUserProfile: async (_parent: any, { id }: { id: string }) => {
       try {
         return await User.findById(id);
       } catch (error) {
@@ -19,7 +19,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    addRequest: async (parent, { description, type, coordinates, urgency, userId }) => {
+    addRequest: async (_parent: any, { description, type, coordinates, urgency, userId }: { description: string, type: string, coordinates: string, urgency: string, userId: string }) => {
       try {
         const user = await User.findById(userId);
         if (!user) throw new Error('User not found');
@@ -39,7 +39,7 @@ export const resolvers = {
         throw new Error('Error adding request');
       }
     },
-    updateUserProfile: async (parent, { id, username, email }) => {
+    updateUserProfile: async (_parent: any, { id, username, email }: { id: string, username: string, email: string }) => {
       try {
         return await User.findByIdAndUpdate(
           id,
