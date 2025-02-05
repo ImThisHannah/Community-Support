@@ -7,8 +7,8 @@ import Dashboard from './components/Dashboard';
 import SignupForm from './components/SignupForm';
 import ResourceList from './components/ResourceList';
 import MapView from './components/MapView';
-import SearchBooks from './pages/SearchBooks'
-import SavedBooks from './pages/SavedBooks'
+
+
 
 const router = createBrowserRouter([
   {
