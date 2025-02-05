@@ -1,5 +1,10 @@
 import { gql } from 'apollo-server';
 
+interface Request {
+  id: number;
+  request: string;
+}
+
 export const typeDefs = gql`
   type Request {
     id: Int
@@ -15,17 +20,17 @@ export const typeDefs = gql`
   }
 `;
 
-const requests = [
+const requests: Request[] = [
   { id: 1, request: 'Help with groceries' },
   { id: 2, request: 'Volunteer for tutoring' },
 ];
 
 export const resolvers = {
   Query: {
-    getRequests: () => requests,
+    getRequests: (): Request[] => requests,
   },
   Mutation: {
-    addRequest: (parent, { request }) => {
+    addRequest: (parent: any, { request }: { request: string }): Request => {
       const newRequest = { id: requests.length + 1, request };
       requests.push(newRequest);
       return newRequest;
