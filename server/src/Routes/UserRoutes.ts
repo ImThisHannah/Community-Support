@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User, { IUser } from '../models/User';
+import User from '../models/User';
 
 const router = express.Router();
 
@@ -18,16 +18,16 @@ router.post('/register', async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser: IUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
 
     // Generate JWT
     const token = jwt.sign({ userId: newUser._id }, 'your_secret_key');
 
-    res.status(201).json({ message: 'User registered successfully', token });
+    return res.status(201).json({ message: 'User registered successfully', token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500).json({ message: 'Server Error' });
   }
 });
 
@@ -48,10 +48,10 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const token = jwt.sign({ userId: user._id }, 'your_secret_key');
 
-    res.json({ token });
+    return res.json({ token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500).json({ message: 'Server Error' });
   }
 });
 

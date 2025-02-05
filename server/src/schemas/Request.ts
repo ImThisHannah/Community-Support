@@ -30,7 +30,7 @@ export const resolvers = {
     getRequests: (): Request[] => requests,
   },
   Mutation: {
-    addRequest: (parent: any, { request }: { request: string }): Request => {
+    addRequest: (_parent: any, { request }: { request: string }): Request => {
       const newRequest = { id: requests.length + 1, request };
       requests.push(newRequest);
       return newRequest;

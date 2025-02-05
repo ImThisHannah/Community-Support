@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Document, Model, model, Schema } from 'mongoose';
-import auth from '../middleware/auth';
+// import auth from '../middleware/auth';
 
 const router = express.Router();
 
@@ -29,12 +29,13 @@ const VolunteerSchema: Schema = new Schema({
 const Volunteer: Model<IVolunteer> = model<IVolunteer>('Volunteer', VolunteerSchema);
 
 // Register as a volunteer
-router.post('/', auth, async (req: Request, res: Response) => {
+// router.post('/', auth, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const { skills, availability, location } = req.body;
 
     const volunteer = new Volunteer({
-      user: req.user.id,
+      user: req.user._id,
       skills,
       availability,
       location: {
@@ -52,21 +53,24 @@ router.post('/', auth, async (req: Request, res: Response) => {
 });
 
 // Update volunteer profile
-router.put('/', auth, async (req: Request, res: Response) => {
+// router.put('/', auth, async (req: Request, res: Response) => {
+router.put('/', async (req: Request, res: Response) => {
   try {
     const { skills, availability, location } = req.body;
 
-    const volunteer = await Volunteer.findOne({ user: req.user.id });
+    const volunteer = await Volunteer.findOne({ user: req.user._id });
     if (!volunteer) {
       return res.status(404).json({ message: 'Volunteer not found' });
     }
 
     volunteer.skills = skills;
     volunteer.availability = availability;
-    volunteer.location
-      = { type: 'Point', coordinates: [location.longitude, location.latitude] };
+    volunteer.location = { type: 'Point', coordinates: [location.longitude, location.latitude] };
+
+    return res.json(volunteer);
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500).json({ message: 'Server Error' });
   }
 });

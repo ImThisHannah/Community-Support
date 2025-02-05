@@ -1,14 +1,14 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
-interface IUser {
+export interface IUser {
   email: string;
-  password?: string; 
+  password: string; 
   role: string; 
 }
 
-interface IUserDocument extends IUser, Document {}
+export interface IUserDocument extends IUser, Document {}
 
-interface IUserModel extends Model<IUserDocument> {
+export interface IUserModel extends Model<IUserDocument> {
   register(userData: IUser): Promise<IUserDocument>;
   login(email: string, password: string): Promise<IUserDocument | null>;
 }
