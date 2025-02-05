@@ -1,4 +1,5 @@
 import { gql } from 'apollo-server';
+import { IResolvers } from 'graphql-tools';
 
 export const typeDefs = gql`
   type Request {
@@ -15,18 +16,23 @@ export const typeDefs = gql`
   }
 `;
 
-const requests = [
+interface Request {
+  id: number;
+  request: string;
+}
+
+const requests: Request[] = [
   { id: 1, request: 'Help with groceries' },
   { id: 2, request: 'Volunteer for tutoring' },
 ];
 
-export const resolvers = {
+export const resolvers: IResolvers = {
   Query: {
-    getRequests: () => requests,
+    getRequests: (): Request[] => requests,
   },
   Mutation: {
-    addRequest: (parent, { request }) => {
-      const newRequest = { id: requests.length + 1, request };
+    addRequest: (parent: any, { request }: { request: string }): Request => {
+      const newRequest: Request = { id: requests.length + 1, request };
       requests.push(newRequest);
       return newRequest;
     },
