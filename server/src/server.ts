@@ -3,7 +3,7 @@ import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { authenticateToken } from './services/auth-service'; 
-// import { typeDefs } from './schemas/typeDefs';  
+import { typeDefs } from './schemas/typeDefs';  
 import { resolvers } from './schemas/resolvers'; 
 import db from './config/connection'; 
 
@@ -22,7 +22,7 @@ const startApolloServer = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  // GraphQL endpoint with authenticateToken for context
+
   app.use('/graphql', expressMiddleware(server, {
     context: ({ req }: { req: Request }) => {
       return authenticateToken({ req }); 
