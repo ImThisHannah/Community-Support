@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { setResources } from '../redux/slices/resourceSlice';
 
 const ResourceList: React.FC = () => {
-  const resources = [
-    { id: 1, type: 'Food Bank', location: 'Downtown' },
-    { id: 2, type: 'Shelter', location: 'West Side' },
-    { id: 3, type: 'Medical Aid', location: 'East Side' }
-  ];
+  const dispatch = useDispatch();
+  const resources = useSelector((state: RootState) => state.resources.list);
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const response = await fetch('/api/resources');
+        const data = await response.json();
+        dispatch(setResources(data));
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+      }
+    };
+
+    fetchResources();
+  }, [dispatch]);
 
   return (
     <div>
       <h2>Available Resources</h2>
       <ul>
-        {resources.map(resource => (
-          <li key={resource.id}>{resource.type} - {resource.location}</li>
+        {resources.map((resource) => (
+          <li key={resource._id}>
+            {resource.name} ({resource.type}) - {resource.contactInfo?.email || 'No contact info'}
+          </li>
         ))}
       </ul>
     </div>

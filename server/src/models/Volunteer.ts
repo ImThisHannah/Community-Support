@@ -1,43 +1,24 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 interface IVolunteer extends Document {
-  user: mongoose.Schema.Types.ObjectId;
-  skills: string[];
-  availability: {
-    day: string;
-    startTime: string;
-    endTime: string;
-  }[];
+  user: string;
+  skills: string;
+  availability: string;
   location: {
-    type: string;
-    coordinates: number[];
+    type: 'Point';
+    coordinates: [number, number];
   };
 }
 
-const volunteerSchema: Schema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  skills: [{ type: String }],
-  availability: [{ 
-    day: String, 
-    startTime: String, 
-    endTime: String 
-  }],
+const volunteerSchema: Schema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  skills: { type: String, required: true },
+  availability: { type: String, required: true },
   location: {
-    type: {
-      type: String,
-      default: 'Point',
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere', // Create a geospatial index for location
-    },
+    type: { type: String, enum: ['Point'], required: true },
+    coordinates: { type: [Number], required: true },
   },
 });
 
 const Volunteer = mongoose.model<IVolunteer>('Volunteer', volunteerSchema);
-
 export default Volunteer;
