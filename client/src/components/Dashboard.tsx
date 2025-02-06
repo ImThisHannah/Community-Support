@@ -1,10 +1,14 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store'; // if the path is one level deeper
 
-const Dashboard: React.FC = () => {
+
+const Dashboard = () => {
+  const user = useSelector((state: RootState) => state.user);
+
   return (
     <div>
-      <h2>Community Support Dashboard</h2>
-      <p>View nearby volunteers, resources, and active requests.</p>
+      <h1>Welcome, {user.username || 'Guest'}!</h1>
+      {user.email && <p>Email: {user.email}</p>}
     </div>
   );
 };
