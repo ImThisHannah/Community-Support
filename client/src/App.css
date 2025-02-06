@@ -7,11 +7,34 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6
+
+ {
   font-family: 'Rubik Mono One', sans-serif;
 }
 
 .small {
   font-weight: 300;
   font-style: italic;
+}
+
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.image-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-grid img:nth-of-type(3) {
+  display: block;
+  margin-left: 250px;
+  margin-right: auto;
 }
