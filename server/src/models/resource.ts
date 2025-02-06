@@ -16,24 +16,15 @@ interface IResource extends Document {
 }
 
 const resourceSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+  name: { type: String, required: true },
   description: String,
   type: {
     type: String,
     enum: ['food', 'shelter', 'medical', 'other'],
   },
   location: {
-    type: {
-      type: String,
-      default: 'Point',
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere', // Create a geospatial index for location
-    },
+    type: { type: String, default: 'Point' },
+    coordinates: { type: [Number], index: '2dsphere' },
   },
   contactInfo: {
     phone: String,
@@ -43,5 +34,4 @@ const resourceSchema: Schema = new Schema({
 });
 
 const Resource = mongoose.model<IResource>('Resource', resourceSchema);
-
 export default Resource;
