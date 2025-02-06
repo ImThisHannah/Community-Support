@@ -42,7 +42,24 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Navbar />
+      <div className="App">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a className="navbar-brand" href="/">Home</a>
+        <a className="nav-link" href="/about">About</a>
+        <a className="nav-link" href="/contact">Contact</a>
+      </nav>
+    </div>
       <Outlet />
+      <div className="container mt-4">
+        <div className="image-grid">
+          <img src="images/Project_3_img_1.jpeg" alt="Image 1" />
+          <img src="images/Project_3_img_4.jpg" alt="Image 2" />
+          <img src="images/community.jpg" alt="Image 3" />
+          {/* <img src="/images/image4.jpg" alt="Image 4" /> */}
+          {/* <img src="/images/image5.jpg" alt="Image 5" /> */}
+          {/* <img src="/images/image6.jpg" alt="Image 6" /> */}
+        </div>
+      </div>
     </ApolloProvider>
   );
 }
