@@ -4,7 +4,7 @@ import Resource from '../models/resource';
 const router = express.Router();
 
 // Get all resources
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const resources = await Resource.find();
     res.json(resources);
