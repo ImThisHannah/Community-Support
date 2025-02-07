@@ -1,69 +1,31 @@
-import { useState, useEffect } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import { ChangeEvent, FormEvent } from 'react';
-import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../utils/mutations';
-import Auth from '../utils/auth';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../redux/slices/userSlices';
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
-const SignupForm = () => {
+// Define the prop types
+interface SignupFormProps {
+  handleModalClose: () => void;
+}
+
+const SignupForm: React.FC<SignupFormProps> = ({ handleModalClose }) => {
   const [userFormData, setUserFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
-  const [validated] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
 
-  const [addUser, { error }] = useMutation(ADD_USER);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setShowAlert(!!error);
-  }, [error]);
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      return;
-    }
-
-    try {
-      const { data } = await addUser({
-        variables: { ...userFormData },
-      });
-
-      Auth.login(data.addUser.token);
-
-      // Dispatch Redux action
-      dispatch(setUser({
-        _id: data.addUser.user._id,
-        username: data.addUser.user.username,
-        email: userFormData.email,
-        token: data.addUser.token,
-      }));
-    } catch (err) {
-      console.error(err);
-    }
-
-    setUserFormData({ username: '', email: '', password: '' });
+    // Handle form submission logic here
+    handleModalClose(); // Call the handleModalClose function when the form is submitted
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-      <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant="danger">
-        Something went wrong with your signup!
-      </Alert>
-
+    <Form onSubmit={handleSubmit}>
       <Form.Group className='mb-3'>
         <Form.Label htmlFor="username">Username</Form.Label>
         <Form.Control
