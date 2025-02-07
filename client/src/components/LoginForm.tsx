@@ -1,5 +1,3 @@
-// see SignupForm.js for comments
-
 import { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import type { ChangeEvent, FormEvent } from 'react';
@@ -9,9 +7,13 @@ import { LOGIN_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
-const LoginForm = ({}: { handleModalClose: () => void }) => {
+interface LoginFormProps {
+  handleModalClose: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ handleModalClose }) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-  const [validated] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   const [login, { error }] = useMutation(LOGIN_USER);
@@ -34,8 +36,9 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
 
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
+      setValidated(true);
+      return;
     }
 
     try {
@@ -44,6 +47,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       });
 
       Auth.login(data.login.token);
+      handleModalClose();
     } catch (e) {
       console.error(e);
     }
