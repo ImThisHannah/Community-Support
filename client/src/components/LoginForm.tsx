@@ -46,6 +46,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleModalClose }) => {
         variables: { ...userFormData },
       });
 
+      // Save the token on the server side
+      await fetch('/api/save-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: data.login.token }),
+      });
+
       Auth.login(data.login.token);
       handleModalClose();
     } catch (e) {
