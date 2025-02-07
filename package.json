@@ -14,12 +14,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.13.1",
     "concurrently": "^8.2.0"
   },
   "dependencies": {
     "@apollo/client": "^3.12.9",
     "@reduxjs/toolkit": "^2.5.1",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.7",
     "react-bootstrap": "^2.10.9",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
