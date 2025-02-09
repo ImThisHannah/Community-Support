@@ -4,7 +4,6 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { authenticateToken } from './services/auth-service.js';
 import { typeDefs } from './schemas/typeDefs.js';
 import { resolvers } from './schemas/resolvers.js';
-import db from './config/connection.js';
 import volunteerRoutes from './Routes/volunteerRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -24,9 +23,7 @@ const server = new ApolloServer({
 
 const startApolloServer = async (): Promise<void> => {
   await server.start();
-  await db;
-
-  connectDB();
+  await connectDB();
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
@@ -40,7 +37,7 @@ const startApolloServer = async (): Promise<void> => {
     context: authenticateToken as any,
   }));
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'dev') {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.get('*', (_req: Request, res: Response) => {
