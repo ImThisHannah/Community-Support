@@ -32,8 +32,6 @@ const startApolloServer = async (): Promise<void> => {
     context: authenticateToken as any,
   }));
 
-  const filename = fileURLToPath(import.meta.url);
-
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
 
