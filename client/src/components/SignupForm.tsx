@@ -1,4 +1,3 @@
-// filepath: /c:/Users/Chast/code/Community-Support/client/src/components/SignupForm.tsx
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { getItem, setItem } from '../utils/localStorage';
