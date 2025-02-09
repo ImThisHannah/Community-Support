@@ -72,6 +72,9 @@ const AppNavbar = () => {
                 <Nav.Item>
                   <Nav.Link eventKey='signup'>Sign Up</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey='Volunteer'>Volunteer</Nav.Link>
+                </Nav.Item>
               </Nav>
             </Modal.Title>
           </Modal.Header>
