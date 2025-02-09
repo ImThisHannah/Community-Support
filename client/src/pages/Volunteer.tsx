@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface Volunteer {
     id: number;
@@ -12,8 +13,16 @@ const VolunteerPage: React.FC = () => {
 
     useEffect(() => {
         fetch('/api/volunteers')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('Data is not an array');
+                }
                 setVolunteers(data);
                 setLoading(false);
             })
@@ -24,16 +33,16 @@ const VolunteerPage: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="text-center mt-5">Loading...</div>;
     }
 
     return (
-        <div>
-            <h1>Volunteers</h1>
-            <ul>
+        <div className="container mt-5">
+            <h1 className="text-center mb-4">Volunteers</h1>
+            <ul className="list-group">
                 {volunteers.map(volunteer => (
-                    <li key={volunteer.id}>
-                        {volunteer.name} - {volunteer.email}
+                    <li key={volunteer.id} className="list-group-item">
+                        <strong>{volunteer.name}</strong> - {volunteer.email}
                     </li>
                 ))}
             </ul>
