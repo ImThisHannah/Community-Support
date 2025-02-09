@@ -8,6 +8,8 @@ import db from './config/connection.js';
 import volunteerRoutes from './Routes/volunteerRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import connectDB from './config/connection.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,9 +26,12 @@ const startApolloServer = async (): Promise<void> => {
   await server.start();
   await db;
 
+  connectDB();
+
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
   app.use('/api/volunteers', volunteerRoutes);
+  app.use('/api/volunteers/:id', volunteerRoutes);
 
   app.use('/graphql', expressMiddleware(server as any, {
     // context: ({ req }: { req: Request }) => {
