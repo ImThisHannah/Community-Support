@@ -7,6 +7,10 @@ import { resolvers } from './schemas/resolvers.js';
 import db from './config/connection.js';
 import volunteerRoutes from './Routes/volunteerRoutes.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -32,10 +36,10 @@ const startApolloServer = async (): Promise<void> => {
   }));
 
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.resolve('../client/dist')));
-  
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+
     app.get('*', (_req: Request, res: Response) => {
-      res.sendFile(path.resolve('../client/dist/index.html'));
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
     });
   }
 
