@@ -1,7 +1,7 @@
-// filepath: /root/utsa/project3/Community-Support/client/src/components/MapView.tsx
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { getItem, setItem } from '../utils/localStorage';
 
 // Declare google as a global variable
 declare const google: any;
@@ -29,9 +29,17 @@ const MapView: React.FC = () => {
   useEffect(() => {
     loadGoogleMapsScript(() => {
       if (mapRef.current) {
+        const storedCenter = getItem('mapCenter');
+        const defaultCenter = storedCenter ? JSON.parse(storedCenter) : { lat: 37.7749, lng: -122.4194 }; // Default to San Francisco
+
         const map = new google.maps.Map(mapRef.current, {
-          center: { lat: 37.7749, lng: -122.4194 }, // Default to San Francisco
+          center: defaultCenter,
           zoom: 10,
+        });
+
+        map.addListener('center_changed', () => {
+          const center = map.getCenter();
+          setItem('mapCenter', JSON.stringify({ lat: center.lat(), lng: center.lng() }));
         });
 
         volunteers.forEach((volunteer) => {
@@ -46,7 +54,6 @@ const MapView: React.FC = () => {
       }
     });
   }, [volunteers]);
-
 
   return <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />;
 };

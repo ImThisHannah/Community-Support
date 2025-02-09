@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Volunteer {
+  name: any;
   _id: string;
   user: string;
   skills: string;

@@ -1,9 +1,11 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
+import { ApolloProvider } from '@apollo/client';
 import store from './redux/store';
+import client from './utils/apolloClient'; // Ensure this path is correct or create the file
 
 import App from './App';
 import Dashboard from './components/Dashboard';
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/signup',
-        element: <SignupForm />,
+        element: <SignupForm handleModalClose={() => {}} />,
       },
       {
         path: '/resources',
@@ -42,9 +44,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
       <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+    </ApolloProvider>
+  </Provider>
 );
