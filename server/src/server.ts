@@ -37,7 +37,7 @@ const startApolloServer = async (): Promise<void> => {
     context: authenticateToken as any,
   }));
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'dev') {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.get('*', (_req: Request, res: Response) => {
