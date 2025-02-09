@@ -24,10 +24,11 @@ const VolunteerPage: React.FC = () => {
                     throw new Error('Data is not an array');
                 }
                 setVolunteers(data);
-                setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching volunteers:', error);
+            })
+            .finally(() => {
                 setLoading(false);
             });
     }, []);
