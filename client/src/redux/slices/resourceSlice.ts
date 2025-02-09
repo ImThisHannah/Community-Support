@@ -5,7 +5,8 @@ interface Resource {
   name: string;
   type: string;
   location: {
-    coordinates: [number, number];
+    type: string;
+    coordinates: [number, number]; 
   };
   contactInfo: {
     phone?: string;
