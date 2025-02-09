@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { Document, Model, model, Schema } from 'mongoose';
-// import auth from '../middleware/auth';
 
 const router = express.Router();
 
