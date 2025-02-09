@@ -12,6 +12,7 @@ import Dashboard from './components/Dashboard';
 import SignupForm from './components/SignupForm';
 import ResourceList from './components/ResourceList';
 import MapView from './components/MapView';
+import VolunteerPage from './pages/VolunteerPage'; // Import the VolunteerPage component
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+      },
+      {
+        path: '/volunteers',
+        element: <VolunteerPage />
       },
       {
         path: '/signup',
