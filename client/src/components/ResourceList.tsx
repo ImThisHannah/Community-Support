@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { setResources } from '../redux/slices/resourceSlice';
+import { getItem, setItem } from '../utils/localStorage';
 
 const ResourceList: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,16 @@ const ResourceList: React.FC = () => {
         const response = await fetch('/api/resources');
         const data = await response.json();
         dispatch(setResources(data));
+        setItem('resources', JSON.stringify(data)); // Store resources in local storage
       } catch (error) {
         console.error('Error fetching resources:', error);
       }
     };
+
+    const cachedResources = getItem('resources');
+    if (cachedResources) {
+      dispatch(setResources(JSON.parse(cachedResources)));
+    }
 
     fetchResources();
   }, [dispatch]);

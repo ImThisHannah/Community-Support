@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+// filepath: /c:/Users/Chast/code/Community-Support/client/src/components/SignupForm.tsx
+import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { getItem, setItem } from '../utils/localStorage';
 
 // Define the prop types
 interface SignupFormProps {
@@ -13,15 +15,25 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleModalClose }) => {
     password: '',
   });
 
+  useEffect(() => {
+    const storedFormData = getItem('signupFormData');
+    if (storedFormData) {
+      setUserFormData(JSON.parse(storedFormData));
+    }
+  }, []);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setUserFormData({ ...userFormData, [name]: value });
+    const updatedFormData = { ...userFormData, [name]: value };
+    setUserFormData(updatedFormData);
+    setItem('signupFormData', JSON.stringify(updatedFormData));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle form submission logic here
     handleModalClose(); // Call the handleModalClose function when the form is submitted
+    localStorage.removeItem('signupFormData'); // Clear form data from local storage after successful submission
   };
 
   return (

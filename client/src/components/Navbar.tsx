@@ -1,14 +1,31 @@
-import { useState } from 'react';
+// filepath: /c:/Users/Chast/code/Community-Support/client/src/components/Navbar.tsx
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
+import { getItem, setItem } from '../utils/localStorage';
 
 import Auth from '../utils/auth';
 
 const AppNavbar = () => {
   // set modal display state
   const [showModal, setShowModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('login');
+
+  useEffect(() => {
+    const storedTab = getItem('activeTab');
+    if (storedTab) {
+      setActiveTab(storedTab);
+    }
+  }, []);
+
+  const handleTabSelect = (key: string | null) => {
+    if (key) {
+      setActiveTab(key);
+      setItem('activeTab', key);
+    }
+  };
 
   return (
     <>
@@ -45,7 +62,7 @@ const AppNavbar = () => {
         onHide={() => setShowModal(false)}
         aria-labelledby='signup-modal'>
         {/* tab container to do either signup or login component */}
-        <Tab.Container defaultActiveKey='login'>
+        <Tab.Container activeKey={activeTab} onSelect={handleTabSelect}>
           <Modal.Header closeButton>
             <Modal.Title id='signup-modal'>
               <Nav variant='pills'>

@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
+import { setItem } from '../utils/localStorage';
 
 interface LoginFormProps {
   handleModalClose: () => void;
@@ -56,6 +57,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleModalClose }) => {
       });
 
       Auth.login(data.login.token);
+      setItem('authToken', data.login.token); // Store the token in local storage
       handleModalClose();
     } catch (e) {
       console.error(e);
