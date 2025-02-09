@@ -2,10 +2,11 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { authenticateToken } from './services/auth-service.js'; 
-import { typeDefs } from './schemas/typeDefs.js';  
-import { resolvers } from './schemas/resolvers.js'; 
-import db from './config/connection.js'; 
+import { authenticateToken } from './services/auth-service.js';
+import { typeDefs } from './schemas/typeDefs.js';
+import { resolvers } from './schemas/resolvers.js';
+import db from './config/connection.js';
+import volunteerRoutes from './Routes/volunteerRoutes.js';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -17,15 +18,15 @@ const server = new ApolloServer({
 
 const startApolloServer = async (): Promise<void> => {
   await server.start();
-  await db; 
+  await db;
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
-
+  app.use('/api/volunteers', volunteerRoutes);
 
   app.use('/graphql', expressMiddleware(server as any, {
     // context: ({ req }: { req: Request }) => {
-    //   return authenticateToken({ req }); 
+    //   return authenticateToken({ req });
     // },
     context: authenticateToken as any,
   }));
