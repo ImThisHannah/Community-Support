@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { authenticateToken } from './services/auth-service.js';
@@ -7,6 +6,8 @@ import { typeDefs } from './schemas/typeDefs.js';
 import { resolvers } from './schemas/resolvers.js';
 import db from './config/connection.js';
 import volunteerRoutes from './Routes/volunteerRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -30,6 +31,8 @@ const startApolloServer = async (): Promise<void> => {
     // },
     context: authenticateToken as any,
   }));
+
+  const filename = fileURLToPath(import.meta.url);
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
