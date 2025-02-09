@@ -1,6 +1,7 @@
 import './App.css';
 import { Outlet } from 'react-router-dom';
 import {
+
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
@@ -44,9 +45,9 @@ function App() {
       <Navbar />
       <div className="App">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">Home</a>
-        <a className="nav-link" href="/about">About</a>
-        <a className="nav-link" href="/contact">Contact</a>
+        <a className="navbar-brand" href="/login">L</a>
+        <a className="nav-link" href="/dashboard">Dashboard</a>
+        <a className="nav-link" href="/volunteer">Volunteer</a>
       </nav>
     </div>
       <Outlet />

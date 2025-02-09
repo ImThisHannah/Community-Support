@@ -41,9 +41,9 @@ const AppNavbar = () => {
                 Volunteer here
               </Nav.Link>
               <Nav.Link as={Link} to='/Home'>
-                Home
+                Dashboard
               </Nav.Link>
-              {/* if user is logged in show saved books and logout */}
+              {}
               {Auth.loggedIn() ? (
                 <>
 
