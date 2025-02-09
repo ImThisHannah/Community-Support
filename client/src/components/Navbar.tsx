@@ -37,15 +37,16 @@ const AppNavbar = () => {
           <Navbar.Toggle aria-controls='navbar' />
           <Navbar.Collapse id='navbar' className='d-flex flex-row-reverse'>
             <Nav className='ml-auto d-flex'>
+              <Nav.Link as={Link} to='/Volunteer'>
+                Volunteer here
+              </Nav.Link>
               <Nav.Link as={Link} to='/Home'>
                 Home
               </Nav.Link>
               {/* if user is logged in show saved books and logout */}
               {Auth.loggedIn() ? (
                 <>
-                  <Nav.Link as={Link} to='/Volunteer'>
-                    Volunteer here
-                  </Nav.Link>
+
                   <Nav.Link onClick={Auth.logout}>Logout</Nav.Link>
                 </>
               ) : (
@@ -71,9 +72,6 @@ const AppNavbar = () => {
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey='signup'>Sign Up</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey='Volunteer'>Volunteer</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Modal.Title>
