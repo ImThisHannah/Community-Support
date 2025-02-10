@@ -1,72 +1,61 @@
-import { model, Schema } from 'mongoose'; 
-import { IUser, IUserDocument, IUserModel } from '../interfaces/IUser';
+import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+// Define an interface for the User document
+interface IUser extends Document {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  isCorrectPassword(password: string): Promise<boolean>;
+}
+
+// Define the schema for the User document
+const userSchema = new Schema<IUser>(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/.+@.+\..+/, 'Must match an email address!'],
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 5,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'volunteer', 'resourceProvider', 'admin'],
+      default: 'user',
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ['user', 'volunteer', 'resourceProvider', 'admin'],
-    default: 'user',
-  },
+  {
+    timestamps: true,
+    toJSON: { getters: true },
+    toObject: { getters: true },
+  }
+);
+
+userSchema.pre<IUser>('save', async function (next) {
+  if (this.isNew || this.isModified('password')) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
+
+  next();
 });
 
-userSchema.statics.register = async (userData: IUser): Promise<IUserDocument> => { 
-  try {
-    const { email, password } = userData;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      throw new Error('User already exists'); 
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10); 
-
-    const newUser = new User({ 
-      email, 
-      password: hashedPassword, 
-    });
-
-    await newUser.save();
-
-    return newUser; 
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+userSchema.methods.isCorrectPassword = async function (password: string): Promise<boolean> {
+  return bcrypt.compare(password, this.password);
 };
 
-userSchema.statics.login = async (email: string, password: string): Promise<IUserDocument | null> => {
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return null; 
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return null; 
-    }
-
-    return user;
-
-  } catch (error) {
-    console.error(error);
-    throw error; 
-  }
-};
-
-const User: IUserModel = model<IUserDocument, IUserModel>('User', userSchema); 
+const User = model<IUser>('User', userSchema);
 
 export default User;
