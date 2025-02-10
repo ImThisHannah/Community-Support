@@ -1,8 +1,21 @@
 import User from '../models/User.js';
 import Request from '../models/Request.js';
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-// const { User } = require('../models');
+// import bcrypt from 'bcrypt';
+// import jwt from 'jsonwebtoken';
+import { signToken, AuthenticationError } from '../utils/auth.js';
+
+interface LoginUserArgs {
+  email: string;
+  password: string;
+}
+
+interface AddUserArgs {
+  input:{
+    username: string;
+    email: string;
+    password: string;
+  }
+}
 
 export const resolvers = {
   Query: {
@@ -53,19 +66,42 @@ export const resolvers = {
         throw new Error('Error updating profile');
       }
     },
-    addUser: async (_parent: any, { username, email, password }: { username: string, email: string, password: string }) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username, email, password: hashedPassword });
-      await user.save();
 
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    login: async (_parent: any, { email, password }: LoginUserArgs) => {
+      // Find a user with the provided email
 
-      return {
-        token,
-        user,
-      };
+      const user = await User.findOne({ email });
+    
+      // If no user is found, throw an AuthenticationError
+      if (!user) {
+        throw new AuthenticationError('Could not authenticate user.');
+      }
+    
+      // Check if the provided password is correct
+      const correctPw = await user.isCorrectPassword(password);
+    
+      // If the password is incorrect, throw an AuthenticationError
+      if (!correctPw) {
+        throw new AuthenticationError('Could not authenticate user.');
+      }
+    
+      // Sign a token with the user's information
+      const token = signToken(user.username, user.email, user._id);
+    
+      // Return the token and the user
+      return { token, user };
+    },
+
+    addUser: async (_parent: any, { input }: AddUserArgs) => {
+      // Create a new user with the provided username, email, and password
+      const user = await User.create({ ...input });
+    
+      // Sign a token with the user's information
+      const token = signToken(user.username, user.email, user._id);
+    
+      // Return the token and the user
+      return { token, user };
     },
   },
 };
 
-module.exports = resolvers;

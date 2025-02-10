@@ -35,6 +35,12 @@ const typeDefs = gql`
       urgency: String!,
       userId: ID!
     ): Request!
+    addUser(
+      username: String!,
+      email: String!,
+      password: String!
+    ): User!
+    login(email: String!, password: String!): String!
     updateUserProfile(id: ID!, username: String, email: String): User!
   }
 `;
